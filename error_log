@@ -1,0 +1,3 @@
+[21-Dec-2022 16:09:26 Asia/Dhaka] PHP Fatal error:  Cannot use DB as DB because the name is already in use in /home/faanush/public_html/softitglobal.com/demo2/app/Http/Controllers/Frontend/CheckoutController.php on line 13
+[26-Dec-2022 16:50:09 Asia/Dhaka] PHP Fatal error:  Cannot use isset() on the result of an expression (you can use "null !== expression" instead) in /home/faanush/public_html/softitglobal.com/demo2/storage/framework/views/4ce40e9fbd5ab2e007f6aea53e4b1f659439dab8.php on line 164
+[26-Dec-2022 16:51:16 Asia/Dhaka] PHP Fatal error:  Cannot use isset() on the result of an expression (you can use "null !== expression" instead) in /home/faanush/public_html/softitglobal.com/demo2/storage/framework/views/4ce40e9fbd5ab2e007f6aea53e4b1f659439dab8.php on line 164
