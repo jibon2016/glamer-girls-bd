@@ -91,6 +91,9 @@
                           <a class="send_to_steadfast btn btn-sm btn-success mb-1" href="{{ route('admin.createSteadfastParcel')}}">
                             Send to Steadfast
                           </a>
+                          <a class="send_to_pathao btn btn-sm btn-info mb-1" href="{{ route('admin.createPathaoParcel')}}">
+                            Send to Pathao
+                          </a>
                          
                           <div class="col-md-4 d-none">
                             <select class="select2" name="redx_status">
@@ -524,10 +527,13 @@ $(document).ready(function(){
             return ;
         }        
     	
-        else if(statusValue != 'on_the_way'){
-            toastr.error('Only On The Way Orders are Accepted!');
-            return ;
-        }
+        // else if(statusValue != 'on_the_way'){
+        //     toastr.error('Only On The Way Orders are Accepted!');
+        //     return ;
+        // }
+
+        console.log(url);
+        console.log(order_ids);
     	
         
         $.ajax({

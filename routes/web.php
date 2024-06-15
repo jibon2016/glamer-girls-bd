@@ -192,27 +192,27 @@ Route::group(['prefix' => 'admin','middleware' => 'auth','as'=>'admin.'], functi
         Route::get('/all-order-delete','deleteAllOrder')->name('deleteAllOrder');
         Route::get('/order-list','orderList')->name('orderList');     
         Route::view('/print_multiple','backend.reports.print');      
-      
+        
         Route::get('/status-wise-order', 'status_wise_order')->name('status_wise_order');  
         Route::get('/search-order', 'searchOrder')->name('searchOrder');
 
         Route::get('/assign-user-store','assignUserStore')->name('assignUserStore');
         Route::get('/multi-order-status-update-store','multuOrderStatusUpdate')->name('multuOrderStatusUpdate');
-      
+        
       //Redx Courier Service
-       Route::get('/create-redx-parcel','OrderSendToRedx')->name('createRedxParcel');     
-      
+        Route::get('/create-redx-parcel','OrderSendToRedx')->name('createRedxParcel');     
+        
       //Pathao Courier Service
-       Route::get('/zones-by-city/{city}','getPathaoZoneListByCity')->name('zonesByCity');     
-       Route::get('/areas-by-zone/{zone}','getPathaoAreaListByZone')->name('areasByZone');    
-       Route::get('/create-pathao-parcel','OrderSendToPathao')->name('createPathaoParcel');
-       
+        Route::get('/zones-by-city/{city}','getPathaoZoneListByCity')->name('zonesByCity');     
+        Route::get('/areas-by-zone/{zone}','getPathaoAreaListByZone')->name('areasByZone');    
+        Route::get('/create-pathao-parcel','OrderSendToPathao')->name('createPathaoParcel');
+        
        //Steadfast Courier Service
-       Route::get('/create-steadfast-parcel', 'OrderSendToSteadfast')->name('createSteadfastParcel');  
-      
+        Route::get('/create-steadfast-parcel', 'OrderSendToSteadfast')->name('createSteadfastParcel');  
+        
       //generate pathao access token
-      Route::get('generate-access-token', 'viewAccessToken');
-      Route::post('generate-access-token', 'generatePathaoAccessToken')->name('generatePathaoAccessToken');
+        Route::get('generate-access-token', 'viewAccessToken');
+        Route::post('generate-access-token', 'generatePathaoAccessToken')->name('generatePathaoAccessToken');
 
     });
 

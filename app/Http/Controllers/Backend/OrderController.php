@@ -65,7 +65,7 @@ class OrderController extends Controller
         $status=$request->status;
         $q=$request->q;
 		$query=Order::whereHas('details.product', function($q){
-          			$q->whereNotNull('name');
+          		    $q->whereNotNull('name');
         		});
                 if(!empty($q)){
                     $query->where(function($row) use ($q){
