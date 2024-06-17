@@ -937,26 +937,47 @@ class OrderController extends Controller
   {
         foreach(request('order_ids') as $id)
         {   
-           $item=Order::with('user')->find($id);
-           if($item->status == 'on_the_way' && $item->courier_id == 2 && $item->courier_tracking_id == NULL)
-           {
-              $status = $this->createPathaoParcel($item);
-              if(!empty($status['data']['consignment_id']))
-              {
+            $item=Order::with('user')->find($id);
+
+            $item->city = request('city');
+            $item->state = request('zone');
+            $item->area_id = request('area');
+            $item->weight = request('weight');
+            $item->save();
+
+            if($item->status == 'on_the_way' && $item->courier_id == null)
+            {
+                if($item->courier_tracking_id == NULL){
+                    return response()->json(['status'=>false ,'error'=> 'This item is already in Track']);
+                }
+                $status = $this->createPathaoParcel($item);
+
+                dd($status);
+                if(!empty($status['data']['consignment_id']))
+                {
                 $item->courier_tracking_id = $status['data']['consignment_id'];
                 $item->save();
-              }
-             else if(!empty($status['errors']))
-             {
-               return response()->json(['status'=>false ,'invoice'=>$item->invoice_no, 'errors'=>$status['errors']]);
+                }
+                else if(!empty($status['errors']))
+                {
+                return response()->json(['status'=>false ,'error'=>$item->invoice_no, 'errors'=>$status['errors']]);
              }
-             
            }
           
         }
         return response()->json(['status'=>true ,'msg'=>'Order Send to Pathao Successfully!!']);
         //return response()->json(['status'=>true ,'msg'=>$data]);
   }
+
+    function pathaoCityList(){
+        
+        $response = Http::withHeaders([
+        'Authorization' => $this->pathao_api_access_token,
+        'Content-Type' => 'application/json',
+        'Accept' => 'application/json',
+    ])->get($this->pathao_api_base_url.'city-list'); 
+    return $response->json();
+    }
   
   function createPathaoParcel($item)
   {
@@ -985,7 +1006,6 @@ class OrderController extends Controller
             "item_description"    			=> $item->note,
         
         ]); 
-    
     return $response->json();
   }
   

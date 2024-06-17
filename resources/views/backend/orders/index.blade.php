@@ -91,7 +91,7 @@
                           <a class="send_to_steadfast btn btn-sm btn-success mb-1" href="{{ route('admin.createSteadfastParcel')}}">
                             Send to Steadfast
                           </a>
-                          <a class="send_to_pathao btn btn-sm btn-info mb-1" href="{{ route('admin.createPathaoParcel')}}">
+                          <a class="pathao_content btn btn-sm btn-info mb-1" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">
                             Send to Pathao
                           </a>
                          
@@ -280,12 +280,114 @@
         </div> <!-- end card-->
     </div> <!-- end col -->
 </div> <!-- end row -->
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" id="pathao_content_model">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Pathao Content </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      
+        <div class="modal-body">
+            
+            <div class="div-group mb-2">
+                <label>City</label>
+                <select class="form-control city-zone" name="city" id="pathao_city" required>
+                </select>
+                <input class="order_id" type="hidden" name="order_id" value="">
+            </div>
+
+            <div class="div-group mb-2">
+                <label>Zone</label>
+                <select class="form-control pathao-zone" name="zone" id="zone" required>
+                </select>
+            </div>
+
+            <div class="div-group mb-2">
+                <label>Area</label>
+                <select class="form-control pathao-area" name="area" id="area" required>
+                </select>
+            </div>
+
+            <div class="div-group mb-2">
+                <label>Weight</label>
+                <input type="text" class="form-control" name="weight" id="weight">
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <a href="{{ route('admin.createPathaoParcel')}}" class="send_to_pathao btn btn-primary"> Submit</a>
+        </div>
+    </div>
+  </div>
+</div>
 @endsection 
 
 @push('js')
 <script src="{{ asset('backend/js/order.js')}}"></script>
 <script>
 $(document).ready(function(){
+
+    $('.pathao_content').on('click', function(){
+        var order = $('input.order_checkbox:checked').map(function(){
+            return $(this).val();
+        });
+        var order_ids=order.get();
+        
+        if(order_ids.length ==0){
+            toastr.error('Please Select Atleast One Order!');
+        }  
+        $('.order_id').val(order_ids);
+        $.ajax({
+            type:'GET',
+            url:"pathao-city-list",
+            success:function(res){
+                var html = '<option value=""> Select Option </option>';
+                const citys = res.data.data;
+                citys.map((city) => {
+                    html += '<option value="'+ city.city_id +'">'+ city.city_name +'</option>'
+                })
+                $(".city-zone").append(html);
+            }
+        });
+    })
+
+    
+
+    $("#pathao_city").on('change', function(){
+        var cityValue = $('#pathao_city').val();
+        $.ajax({
+            type:'GET',
+            url:"zones-by-city/" + cityValue,
+            success:function(res){
+                var html = '<option value=""> Select Option </option>';
+                const zones = res.zones;
+                zones.map((zone) => {
+                    html += '<option value="'+ zone.zone_id +'">'+ zone.zone_name +'</option>'
+                })
+                $(".pathao-zone").append(html);
+            }
+        });
+    })
+
+    $("#zone").on('change', function(){
+        var zoneValue = $('#zone').val();
+        $.ajax({
+            type:'GET',
+            url:"areas-by-zone/" + zoneValue,
+            success:function(res){
+                var html = '<option value=""> Select Option </option>';
+                const areas = res.areas;
+                areas.map((area) => {
+                    html += '<option value="'+ area.area_id +'">'+ area.area_name +'</option>'
+                })
+                $(".pathao-area").append(html);
+            }
+        });
+    })
   
   $("select[name='redx_status']").on('change', function(){
       getOrderList();
@@ -515,46 +617,53 @@ $(document).ready(function(){
   $(document).on('click', 'a.send_to_pathao', function(e){
         e.preventDefault();
     	var statusValue = $("input[name='status']:checked").val();
+        var order_ids = $(".order_id").val().split();
         var url = $(this).attr('href');
     	let link = $(this);
-        var order = $('input.order_checkbox:checked').map(function(){
-          return $(this).val();
-        });
-        var order_ids=order.get();
+
+        var city = $('#pathao_city').val();
+        var zone = $('#zone').val();
+        var area = $('#area').val();
+        var weight = $('#weight').val();
+
+
+        if (isNaN(weight)) {
+            $("#exampleModal").modal('hide');
+            toastr.error('Please give weight as a number');
+            return ;
+        }
         
         if(order_ids.length ==0){
             toastr.error('Please Select Atleast One Order!');
+            $("#exampleModal").modal('hide');
             return ;
-        }        
-    	
-        // else if(statusValue != 'on_the_way'){
-        //     toastr.error('Only On The Way Orders are Accepted!');
-        //     return ;
-        // }
+        } 
 
-        console.log(url);
-        console.log(order_ids);
     	
         
         $.ajax({
-           type:'GET',
-           url,
-           data:{order_ids},
-           beforeSend: function(){
-             link.addClass('disable-click');
-             link.text('Please wait...');
-           },
-           success:function(res){
-               link.removeClass('disable-click');
-               link.text('Send to Pathao');
-               if(res.status){               
+            type:'GET',
+            url,
+            data:{order_ids, city, zone, area, weight},
+            beforeSend: function(){
+                link.addClass('disable-click');
+                link.text('Please wait...');
+            },
+            success:function(res){
+                link.removeClass('disable-click');
+                link.text('Send to Pathao');
+                if(res.status){       
+                $("#exampleModal").modal('hide');        
                 toastr.success(res.msg);
-                   
             }else{
-                toastr.error(`Invoice :${res.invoice} something went wrong!`);
-              	console.log(res.errors);
+                $("#exampleModal").modal('hide');
+                toastr.warning(res.error);
+                console.log(res.errors);
+            }},
+            error:function(error){
+                $("#exampleModal").modal('hide');
+                console.log(error);
             }
-           }
         });
     
     });
