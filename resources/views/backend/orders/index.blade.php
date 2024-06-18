@@ -626,12 +626,6 @@ $(document).ready(function(){
         var area = $('#area').val();
         var weight = $('#weight').val();
 
-
-        if (isNaN(weight)) {
-            $("#exampleModal").modal('hide');
-            toastr.error('Please give weight as a number');
-            return ;
-        }
         
         if(order_ids.length ==0){
             toastr.error('Please Select Atleast One Order!');

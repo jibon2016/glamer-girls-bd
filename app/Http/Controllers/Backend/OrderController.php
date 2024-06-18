@@ -945,29 +945,29 @@ class OrderController extends Controller
             $item->weight = request('weight');
             $item->save();
 
-            if($item->status == 'on_the_way' && $item->courier_id == null)
+            if($item->status !== 'complete' && $item->status !== 'cancell')
             {
-                if($item->courier_tracking_id == NULL){
+                if($item->courier_tracking_id !== NULL){
                     return response()->json(['status'=>false ,'error'=> 'This item is already in Track']);
                 }
                 $status = $this->createPathaoParcel($item);
-
-                dd($status);
                 if(!empty($status['data']['consignment_id']))
                 {
-                $item->courier_tracking_id = $status['data']['consignment_id'];
-                $item->save();
+                    $item->courier_tracking_id = $status['data']['consignment_id'];
+                    $item->save();
                 }
                 else if(!empty($status['errors']))
                 {
-                return response()->json(['status'=>false ,'error'=>$item->invoice_no, 'errors'=>$status['errors']]);
-             }
-           }
-          
+                    return response()->json(['status'=>false ,'error'=>$item->invoice_no, 'errors'=>$status['errors']]);
+                }
+            }
+            else {
+                return response()->json(['status'=>false ,'error'=> 'Parcel Status is Complete or Cancel']);
+            }
         }
         return response()->json(['status'=>true ,'msg'=>'Order Send to Pathao Successfully!!']);
         //return response()->json(['status'=>true ,'msg'=>$data]);
-  }
+}
 
     function pathaoCityList(){
         
