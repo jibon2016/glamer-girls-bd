@@ -207,6 +207,7 @@ Route::group(['prefix' => 'admin','middleware' => 'auth','as'=>'admin.'], functi
         Route::get('/areas-by-zone/{zone}','getPathaoAreaListByZone')->name('areasByZone');    
         Route::get('/create-pathao-parcel','OrderSendToPathao')->name('createPathaoParcel');
         Route::get('/pathao-city-list','pathaoCityList')->name('pathaoCityList');
+        Route::get('/get-courier-status/{tracking_id}','getCourierStaus');
         
        //Steadfast Courier Service
         Route::get('/create-steadfast-parcel', 'OrderSendToSteadfast')->name('createSteadfastParcel');  

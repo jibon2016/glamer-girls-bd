@@ -235,22 +235,25 @@
                                   ?>
                                 
                                 </td>
-                                <td style="width:15%"><a class="btn_modal" href="{{ route('admin.orderStatus', $item->id)}}">
-                                      @if ($item->status == 'pending')
-                                      <span class="badge badge-primary">{{$item->status}}</span>
-                                      @elseif ($item->status == 'processing')
-                                      <span class="badge badge-info">{{$item->status}}</span>
-                                      @elseif ($item->status == 'on_the_way')
-                                      <span class="badge badge-dark">{{$item->status}}</span>
-                                      @elseif ($item->status == 'on_hold')
-                                      <span class="badge badge-warning">{{$item->status}}</span>
-                                      @elseif ($item->status == 'complete')
-                                      <span class="badge badge-success">{{$item->status}}</span>
-                                      @elseif ($item->status == 'cancell')
-                                      <span class="badge badge-danger">{{$item->status}}</span>
-                                      @endif
-                                        
+                                <td style="width:15%">
+                                    <a class="btn_modal" href="{{ route('admin.orderStatus', $item->id)}}">
+                                        @if ($item->status == 'pending')
+                                        <span class="badge badge-primary">{{$item->status}}</span>
+                                        @elseif ($item->status == 'processing')
+                                        <span class="badge badge-info">{{$item->status}}</span>
+                                        @elseif ($item->status == 'on_the_way')
+                                        <span class="badge badge-dark">{{$item->status}}</span>
+                                        @elseif ($item->status == 'on_hold')
+                                        <span class="badge badge-warning">{{$item->status}}</span>
+                                        @elseif ($item->status == 'complete')
+                                        <span class="badge badge-success">{{$item->status}}</span>
+                                        @elseif ($item->status == 'cancell')
+                                        <span class="badge badge-danger">{{$item->status}}</span>
+                                        @else
+                                        <span class="badge badge-info">{{$item->status}}</span>
+                                        @endif
                                     </a>
+                                    <a class="reload-status btn btn-sm btn-success" href="{{$item->courier_tracking_id}}"><i class="mdi mdi-refresh"></i></a>
                                 </td>
                                 <td><a href="{{ route('admin.orders.view', $item->id)}}" target="_blank">
                                         
@@ -664,7 +667,7 @@ $(document).ready(function(){
     });
 
   //Steadfast Courier Service
-  $(document).on('click', 'a.send_to_steadfast', function(e){
+    $(document).on('click', 'a.send_to_steadfast', function(e){
         e.preventDefault();
     	var statusValue = $("input[name='status']:checked").val();
         var url = $(this).attr('href');
@@ -707,7 +710,33 @@ $(document).ready(function(){
         });
     
     });
-    
+    $(document).on('click', 'a.reload-status', function(e){
+        e.preventDefault();
+        var url = $(this).attr('href');
+    	let link = $(this);
+        if (url) {
+            $.ajax({
+            type:'GET',
+            url:"get-courier-status/" + url,
+            beforeSend: function(){
+                link.addClass('disable-click');
+            },
+            success:function(res){
+                console.log(res);
+                link.removeClass('disable-click');
+                if(res.status){               
+                    toastr.success(res.success);
+                    window.location.reload();
+                }else{
+                    toastr.error(`Invoice :${res.invoice} something went wrong!`);
+                    console.log(res.errors);
+                }
+            }
+            });
+        }else{
+            toastr.warning("This Order not have Consignment ID");
+        }
+    });
 
     
 

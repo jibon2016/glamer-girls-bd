@@ -982,6 +982,41 @@ class OrderController extends Controller
     ])->get($this->pathao_api_base_url.'city-list'); 
     return $response->json();
     }
+
+    function getCourierStaus ($tracking_id)
+    {
+        $order = Order::where('courier_tracking_id', $tracking_id)->first();
+        if(!$order)
+        {
+            return response()->json(['status'=>false, 'error'=>'Order Not Found']);
+        }
+        if(strlen($tracking_id) === 14 )
+        {
+            $response = Http::withHeaders([
+                'Authorization' => $this->pathao_api_access_token,
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+            ])->get($this->pathao_api_base_url.'orders/'. $tracking_id.'/info'); 
+            
+            $parcel =  $response->json();
+            $order->status = strtolower($parcel["data"]["order_status"]);
+            $order->save();
+            return response()->json(['status'=>true, 'success'=>'Order Update Successfully']);
+        }else if (strlen($tracking_id) === 8)
+        {
+            $response = Http::withHeaders([
+                'Api-Key' => $this->steadfast_api_key,
+                'Secret-Key' => $this->steadfast_secret_key,
+                'Content-Type' => 'application/json'
+            ])->get($this->steadfast_api_base_url.'status_by_cid/'.$tracking_id); 
+            
+            $parcel =  $response->json();
+            $order->status = strtolower($parcel["delivery_status"]);
+            $order->save();
+            return response()->json(['status'=>true, 'success'=>'Order Update Successfully']);
+        }
+        dd("end");
+    }
   
   function createPathaoParcel($item)
   {
@@ -1028,9 +1063,10 @@ class OrderController extends Controller
            else if($item->courier_tracking_id == NULL)
            {
               $status = $this->createSteadfastParcel($item);
-              if(!empty($status['consignment']['consignment_id']))
+              if(!empty($status['consignment']['tracking_code']))
               {
-                $item->courier_tracking_id = $status['consignment']['consignment_id'];
+                $item->courier_tracking_id = $status['consignment']['tracking_code'];
+                $item->courier_id = 5; //Id 5 is Steadfast Parcel
                 $item->save();
               }
               else
