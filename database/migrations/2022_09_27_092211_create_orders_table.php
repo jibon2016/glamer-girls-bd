@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('first_name',200)->nullable();
             $table->string('last_name',200)->nullable();
             $table->string('mobile',50)->nullable();
+            $table->integer('order_serial')->nullable();
             $table->date('date')->nullable();
             $table->string('payment_status',50)->nullable()->default('due');
             $table->string('status',50)->nullable()->default('pending');

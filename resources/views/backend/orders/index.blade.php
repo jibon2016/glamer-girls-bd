@@ -216,7 +216,7 @@
                               	<td style="color: #000;">{{ \Carbon\Carbon::parse($item->created_at)->diffForHumans() }}</td>
                                 <td style="color: #000;">{{$item->first_name.' '.$item->last_name}}<br>
                                     {{$item->shipping_address}}<br>
-                                    {{$item->mobile}} <a class="btn btn-sm btn-primary" href="tel:{{$item->mobile}}"><span>Call</span></a>
+                                    {{$item->mobile}} @if ($item->order_serial) ({{ $item->order_serial}}) @endif <a class="btn btn-sm btn-primary" href="tel:{{$item->mobile}}"><span>Call</span></a>
                                 </td>
                               <td>
                                   
@@ -355,7 +355,7 @@ $(document).ready(function(){
         });
     })
 
-    
+
 
     $("#pathao_city").on('change', function(){
         var cityValue = $('#pathao_city').val();
@@ -388,36 +388,36 @@ $(document).ready(function(){
             }
         });
     })
-  
-  $("select[name='redx_status']").on('change', function(){
-      getOrderList();
-  });   
-  
-  $("select[name='courier_type']").on('change', function(){
-      getOrderList();
-  });  
-  
-  $('.order_sts').on('click', function(){
-      getOrderList();
-  });
-  
-  function getOrderList()
-  {
-   	  var statusValue = $("input[name='status']:checked").val();
-      var redx_status = $("select[name='redx_status']").val();
-      var courier_type = $("select[name='courier_type']").val();
-      $.ajax({
-        type: 'GET',
-      	url: "{{ route('admin.status_wise_order') }}",
-        data: {statusValue, redx_status, courier_type},
-        success: function(res){
-      		if(res.success == true){            
-              $('#rcvd_order').html(res.view);             	
-            }
-        }     
-      }); 
-  }
-  
+    
+    $("select[name='redx_status']").on('change', function(){
+        getOrderList();
+    });   
+    
+    $("select[name='courier_type']").on('change', function(){
+        getOrderList();
+    });  
+    
+    $('.order_sts').on('click', function(){
+        getOrderList();
+    });
+    
+    function getOrderList()
+    {
+        var statusValue = $("input[name='status']:checked").val();
+        var redx_status = $("select[name='redx_status']").val();
+        var courier_type = $("select[name='courier_type']").val();
+        $.ajax({
+            type: 'GET',
+            url: "{{ route('admin.status_wise_order') }}",
+            data: {statusValue, redx_status, courier_type},
+            success: function(res){
+                if(res.success == true){            
+                $('#rcvd_order').html(res.view);             	
+                }
+            }     
+        }); 
+    }
+    
     $('#submit_search').on('click', function(){
       var searchValue = $("input[name='q']").val();
       $.ajax({
@@ -626,7 +626,6 @@ $(document).ready(function(){
         var area = $('#area').val();
         var weight = $('#weight').val();
 
-        
         if(order_ids.length ==0){
             toastr.error('Please Select Atleast One Order!');
             $("#exampleModal").modal('hide');

@@ -38,8 +38,8 @@
                                 <td style="color: #000;">#{{$item->invoice_no}}</td>
                               	<td style="color: #000;">{{ dateFormate($item->date)}}</td>
                                 <td style="color: #000;">{{$item->first_name.' '.$item->last_name}}<br>
-                                    {{$item->shipping_address}}<br>
-                                    {{$item->mobile}}
+                                  {{$item->shipping_address}}<br>
+                                  {{$item->mobile}} @if ($item->order_serial) ({{ $item->order_serial}}) @endif <a class="btn btn-sm btn-primary" href="tel:{{$item->mobile}}"><span>Call</span></a>
                                 </td>
                               <td>
                                 @foreach($item->details as $detail)                             

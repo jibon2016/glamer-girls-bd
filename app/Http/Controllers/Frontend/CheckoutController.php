@@ -16,7 +16,7 @@ use App\Models\User;
 use App\Models\Product;
 use App\Models\Variation;
 
-class CheckoutController extends Controller
+    class CheckoutController extends Controller
 {
     public $modulutil;
     public $util;
@@ -111,7 +111,7 @@ class CheckoutController extends Controller
             ];
        
 
-      	$charge=DeliveryCharge::where('id', $data['delivery_charge_id'])->first();      	;
+      	$charge=DeliveryCharge::where('id', $data['delivery_charge_id'])->first();
       	$charge=$charge?$charge->amount:0;
         $data['date']=date('Y-m-d');
 
@@ -319,7 +319,8 @@ class CheckoutController extends Controller
         
         // Order Assign Among Users End
         
-        
+        // User Order Serial
+        $orderCount = Order::where('mobile', $request->mobile)->get()->count();
         
         
         //$data['invoice_no']=time();
@@ -327,8 +328,9 @@ class CheckoutController extends Controller
         $data['discount']=$total_discount+$coupn_discount;
         $data['amount']=$total_discount+$total;
         $data['shipping_charge']=$charge;
-      	$data['final_amount']=$total + $charge-$coupn_discount;		
-      	
+        $data['final_amount']=$total + $charge-$coupn_discount;	
+        $data['order_serial']= ++$orderCount;	
+        
         DB::beginTransaction();
         try {
 

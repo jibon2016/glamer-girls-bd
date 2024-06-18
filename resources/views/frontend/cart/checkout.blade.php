@@ -152,7 +152,7 @@ $coupon_visibility = $info->coupon_visibility;
         <div class="container">
             <form action="{{ route('front.checkouts.store')}}" method="POST" id="">
                 @csrf
-
+              
                 <div class="row">
                     <div class="col-lg-5">
                          <div class="axil-checkout-notice" style="display: {{ ($coupon_visibility == '1') ? 'block' : 'none' }}"> 
