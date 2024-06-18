@@ -942,7 +942,9 @@ class OrderController extends Controller
             $item->city = request('city');
             $item->state = request('zone');
             $item->area_id = request('area');
+            $item->shipping_address = request('address');
             $item->weight = request('weight');
+
             $item->save();
 
             if($item->status !== 'complete' && $item->status !== 'cancell')
@@ -951,9 +953,11 @@ class OrderController extends Controller
                     return response()->json(['status'=>false ,'error'=> 'This item is already in Track']);
                 }
                 $status = $this->createPathaoParcel($item);
+
                 if(!empty($status['data']['consignment_id']))
                 {
                     $item->courier_tracking_id = $status['data']['consignment_id'];
+                    $item->courier_id = 2; //Id 2 is pathao Parcel
                     $item->save();
                 }
                 else if(!empty($status['errors']))

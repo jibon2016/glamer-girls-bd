@@ -625,6 +625,8 @@ $(document).ready(function(){
         var zone = $('#zone').val();
         var area = $('#area').val();
         var weight = $('#weight').val();
+        var address = $('#area option:selected').text() +", "+ $('#zone option:selected').text()+ ", " +$('#pathao_city option:selected').text();
+
 
         if(order_ids.length ==0){
             toastr.error('Please Select Atleast One Order!');
@@ -637,7 +639,7 @@ $(document).ready(function(){
         $.ajax({
             type:'GET',
             url,
-            data:{order_ids, city, zone, area, weight},
+            data:{order_ids, city, zone, area, weight, address},
             beforeSend: function(){
                 link.addClass('disable-click');
                 link.text('Please wait...');
