@@ -738,6 +738,54 @@ $(document).ready(function(){
         }
     });
 
+
+    $(document).on('click','a.delete', function(e) {
+    var form=$(this);
+    e.preventDefault(); 
+    swal({
+      title: "Are you sure?",
+      text: "You want To Delete!",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#006400",
+      confirmButtonText: "Yes, do it!",
+      cancelButtonText: "No, cancel plz!",
+      closeOnConfirm: false,
+      closeOnCancel: false
+    },
+    function(isConfirm){
+      if (isConfirm) {
+
+        var url=$(form).attr('href');
+
+        $.ajax({
+            type: 'DELETE',
+            url: url,
+            data: {"_token": "{{ csrf_token() }}"},
+            success: function(res) {
+                
+                if(res.status==true){
+                    toastr.success(res.msg);
+                    if(res.url){
+                        document.location.href = res.url;
+                    }else{
+                        window.location.reload();
+                    }
+                }else if(res.status==false){
+                    toastr.error(res.msg);
+                }
+                
+            },
+            error:function (response){
+                
+            }
+        });
+      } else {
+        swal("Cancelled", "Your imaginary file is safe :)", "error");
+      }
+    });
+});
+  
     
 
 })

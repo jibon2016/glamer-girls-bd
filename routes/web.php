@@ -219,7 +219,7 @@ Route::group(['prefix' => 'admin','middleware' => 'auth','as'=>'admin.'], functi
     });
 
     Route::get('/recommended-update',[ProductController::class,'recommendedUpdate'])->name('recommendedUpdate');
-  	Route::get('/product-copy/{id}',[ProductController::class,'productCopy'])->name('productCopy');
+    Route::get('/product-copy/{id}',[ProductController::class,'productCopy'])->name('productCopy');
   
     Route::resource('products',ProductController::class);
     
