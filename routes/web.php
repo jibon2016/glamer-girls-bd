@@ -227,6 +227,7 @@ Route::group(['prefix' => 'admin','middleware' => 'auth','as'=>'admin.'], functi
     Route::resource('categories',CategoryController::class);
     Route::resource('sliders',SliderController::class);
     Route::resource('orders',OrderController::class);
+    Route::get('order/delete/{id}', [OrderController::class, 'destroy'])->name('order.delete');
     Route::get('/orders/view/{id}',[OrderController::class,'order_view'])->name('orders.view');
     Route::resource('users',UsersController::class);
     Route::resource('roles',RoleController::class);

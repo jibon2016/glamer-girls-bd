@@ -209,7 +209,7 @@
                                     <a href="{{$item->status === 'pending' ? 'javascript:void(0)' : route('admin.orders.show',[$item->id])}}" target="{{$item->status === 'pending' ? '' : '_blank'}}" class="action-icon " title="{{$item->status === 'pending' ? 'pending invoice will not be printed' : 'Print Invoice'}}"> <i class="fa fa-print" aria-hidden="true"></i></a>
                                     <a href="{{ route('admin.orders.edit',[$item->id])}}" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
                                     @can('order.delete')
-                                    <a href="{{ route('admin.orders.destroy',[$item->id])}}" class="delete action-icon"> <i class="mdi mdi-delete"></i></a>
+                                    <a href="{{ route('admin.order.delete',[$item->id])}}" class="delete action-icon"> <i class="mdi mdi-delete"></i></a>
                                     @endcan
                                 </td>
                                 <td style="color: #000;">#{{$item->invoice_no}}</td>
@@ -740,51 +740,25 @@ $(document).ready(function(){
 
 
     $(document).on('click','a.delete', function(e) {
-    var form=$(this);
-    e.preventDefault(); 
-    swal({
-      title: "Are you sure?",
-      text: "You want To Delete!",
-      type: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#006400",
-      confirmButtonText: "Yes, do it!",
-      cancelButtonText: "No, cancel plz!",
-      closeOnConfirm: false,
-      closeOnCancel: false
-    },
-    function(isConfirm){
-      if (isConfirm) {
-
-        var url=$(form).attr('href');
-
-        $.ajax({
-            type: 'DELETE',
-            url: url,
-            data: {"_token": "{{ csrf_token() }}"},
-            success: function(res) {
-                
-                if(res.status==true){
+        e.preventDefault();
+        let result = confirm("Press OK delete This order");
+        if (result === true) {
+            var url = $(this).attr('href');
+            
+            $.ajax({
+                type:'GET',
+                url:url,
+                success:function(res){
+                    if(res.status==true){
                     toastr.success(res.msg);
-                    if(res.url){
-                        document.location.href = res.url;
-                    }else{
-                        window.location.reload();
+                    window.location.reload();
+                    }else if(res.status==false){
+                        toastr.error(res.msg);
                     }
-                }else if(res.status==false){
-                    toastr.error(res.msg);
                 }
-                
-            },
-            error:function (response){
-                
-            }
-        });
-      } else {
-        swal("Cancelled", "Your imaginary file is safe :)", "error");
-      }
+            });
+        } 
     });
-});
   
     
 
