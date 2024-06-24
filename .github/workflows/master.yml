@@ -18,7 +18,7 @@ jobs:
     - name: FTP-Deploy-Action
       uses: SamKirkland/FTP-Deploy-Action@2.0.0
       env:
-        FTP_SERVER: 103.159.36.42
+        FTP_SERVER: ftp.glamergirlsbd.com
         FTP_USERNAME: ${{ secrets.ftp_username }}
         FTP_PASSWORD: ${{ secrets.ftp_password }}
         REMOTE_DIR: /public_html/
