@@ -174,3 +174,8 @@ function BanglaText($index)
   return $bangla_text[$index]; 
 }
 
+function divnum($numerator, $denominator)
+{
+    return $denominator == 0 ? 0 : ($numerator / $denominator);
+}
+

@@ -100,7 +100,7 @@
                                         <td>{{ $pathaoTotal }}</td>
                                         <td class="table-success">{{ $courier[2]['delivered'] }}</td>
                                         <td class="table-danger">{{ $courier[2]['pending'] }}</td>
-                                        <td>{{ ($courier[2]['delivered'] * 100)/($courier[2]['delivered'] + $courier[2]['pending'])  }}%</td>
+                                        <td>{{ divnum(($courier[2]['delivered'] * 100) , ($courier[2]['delivered'] + $courier[2]['pending']))  }}%</td>
                                     </tr>
                                 @else
                                     <tr>
@@ -123,7 +123,7 @@
                                         <td>{{ $sfTotal }}</td>
                                         <td class="table-success">{{ $courier[5]['delivered'] }}</td>
                                         <td class="table-danger">{{ $courier[5]['pending'] }}</td>
-                                        <td>{{ ($courier[5]['delivered'] * 100)/($courier[5]['delivered'] + $courier[5]['pending']) }}</td>
+                                        <td>{{ divnum(($courier[5]['delivered'] * 100) ,($courier[5]['delivered'] + $courier[5]['pending'])) }}</td>
                                         </tr>
                                 @else
                                     <tr>
@@ -146,7 +146,7 @@
                                     <td>{{ $redxTotal }}</td>
                                     <td class="table-success">{{ $courier[6]['delivered'] }}</td>
                                     <td class="table-danger">{{ $courier[6]['pending'] }}</td>
-                                    <td>{{ ($courier[6]['delivered'] * 100)/($courier[6]['delivered'] + $courier[6]['pending']) }}</td>
+                                    <td>{{ divnum(($courier[6]['delivered'] * 100), ($courier[6]['delivered'] + $courier[6]['pending'])) }}</td>
                                 </tr>
                                 @else
                                     <tr>
