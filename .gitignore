@@ -2,8 +2,15 @@
 /node_modules
 /public/build
 /public/hot
+/public/video
+/public/images
+/public/admin_assets
+/public/installer
+/public/vendor
 /public/storage
 /storage/*.key
+/storage/framework/views/*
+/storage/framework/sessions/*
 /vendor
 .env
 .env.backup

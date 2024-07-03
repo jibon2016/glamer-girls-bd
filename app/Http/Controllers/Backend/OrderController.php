@@ -84,7 +84,7 @@ class OrderController extends Controller
         
         $yes_count = Order::whereNotNull('courier_tracking_id')->where('status', 'on_the_way')->count();
         $no_count = Order::whereNull('courier_tracking_id')->where('status', 'on_the_way')->count();
-        $items=$query->latest()->paginate(30);
+        $items=$query->latest()->paginate(5);
         return view('backend.orders.index', compact('items', 'status','q', 'yes_count', 'no_count'));
     }
   
@@ -856,13 +856,16 @@ class OrderController extends Controller
         return response()->json(['status'=>true ,'msg'=>'Order Send to Redx Successfully!!']);
         //return response()->json(['status'=>true ,'msg'=>$data]);
   }
+
+
   
   function getRedxAreaList($by = null, $value = null)
   {
       $response = Http::withHeaders([
             'API-ACCESS-TOKEN' => $this->redx_api_access_token,
        ])->get($this->redx_api_base_url.'areas'); 
-       $areas = $response->json()['areas'];
+       $areas = $response->json();
+       dd($areas);
        return $areas;
   }
   function createRedxParcel($item)
@@ -942,7 +945,7 @@ class OrderController extends Controller
             $item->city = request('city');
             $item->state = request('zone');
             $item->area_id = request('area');
-            $item->shipping_address = request('address');
+            $item->shipping_address = $item->shipping_address . '( '. request('address'). ')';
             $item->weight = request('weight');
 
             $item->save();
@@ -1122,4 +1125,37 @@ class OrderController extends Controller
     
     dd($response->json());
   }
+
+    public function custormerOrderInfo($number)
+    {
+        $courier = [];
+        $user = User::where('mobile', $number)->first();
+        $groupedOrder = $user->orders->groupBy('courier_id')->all();
+        
+
+        if(count($groupedOrder) > 0){
+            foreach ($groupedOrder as $key => $value) {
+                if($key){
+                    if(count($value) > 0){
+                        $courier[$key] = $this->processItem($value);
+                    }
+                }
+            }
+        }
+
+        return view('backend.orders.customer_orders', compact('number', 'user', 'courier'));
+    }
+
+    public function processItem ($value){
+        $arr = ['pending' => 0, 'delivered' => 0 ] ;
+        foreach($value as $item){
+            if($item->status == "pending"){
+                $arr[$item->status] += 1;
+            }
+            if($item->status == "delivered"){
+                $arr[$item->status] += 1;
+            }
+        }
+        return $arr;
+    }
 }

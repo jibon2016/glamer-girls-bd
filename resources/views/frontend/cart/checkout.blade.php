@@ -629,8 +629,8 @@ $coupon_visibility = $info->coupon_visibility;
   'items': [  @foreach ($cart as $key=>$item)
           
         {
-        'item_name': '{{ $item['name']}}',
-        'item_id': "{{ $item['product_id'] }}",
+        'item_name': {{ $item['name']}},
+        'item_id': {{ $item['product_id'] }},
         'brand': '',
         'item_category': '',
         'price': {{ $item['price'] }},
