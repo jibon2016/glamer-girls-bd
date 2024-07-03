@@ -9,14 +9,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: 🚚 Get latest code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v3
     - name: Node package install
       run: npm install 
     - name: Node file compiled
       run: npm run build
     
     - name: 📂 Sync files
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      uses: SamKirkland/FTP-Deploy-Action@v4.0.0
       with:
         server: 103.159.36.42
         username: ${{ secrets.ftp_username }}

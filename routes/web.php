@@ -124,8 +124,8 @@ Route::group(['as'=>'front.'], function() {
         Route::post('/seller-register-post','sellerRegisterPost')->name('sellerRegisterPost');
         Route::post('/user-register','Register')->name('register');
         
-         Route::get('/get-otp','getOpt')->name('getOpt');
-         Route::post('/otp-verify','optVerify')->name('optVerify');
+        Route::get('/get-otp','getOpt')->name('getOpt');
+        Route::post('/otp-verify','optVerify')->name('optVerify');
     });
 
 
@@ -198,8 +198,11 @@ Route::group(['prefix' => 'admin','middleware' => 'auth','as'=>'admin.'], functi
 
         Route::get('/assign-user-store','assignUserStore')->name('assignUserStore');
         Route::get('/multi-order-status-update-store','multuOrderStatusUpdate')->name('multuOrderStatusUpdate');
+
+        Route::get('/customer/{number}/orders', 'custormerOrderInfo')->name('customer.orders');
         
       //Redx Courier Service
+        Route::get('/redx-city-list','getRedxAreaList');     
         Route::get('/create-redx-parcel','OrderSendToRedx')->name('createRedxParcel');     
         
       //Pathao Courier Service

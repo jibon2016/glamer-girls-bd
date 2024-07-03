@@ -281,7 +281,7 @@ $data=getProductInfo($product);
                                       </div>
                                   </form>
                               </div>
-                                                          <div class="col-md-12">
+                                <div class="col-md-12">
                                   <form method="POST" action="{{ route('front.carts.store')}}" id="cart_form">
                                     @csrf
                                     @if($product->type=='single')
@@ -463,46 +463,46 @@ $data=getProductInfo($product);
 @push('js')
 <script type="text/javascript">
 
-  $(document).on('submit','form#cart_submit', function(e) {   
-    e.preventDefault();
+//   $(document).on('submit','form#cart_submit', function(e) {   
+//     e.preventDefault();
     
-    let url=$(this).attr('action');
-	let method=$(this).attr('method');
-	let data= $(this).serialize();
+//     let url=$(this).attr('action');
+// 	let method=$(this).attr('method');
+// 	let data= $(this).serialize();
 	
-	$.ajax({
-	    url: url,
-        method: method,
-        data: data,
-        success: function (res) {
-            if (res.success) {
-                toastr.success(res.msg);
-                if (res.view) {
-                	$(document).find('div#cart_section').html(res.view);
-                }
+// 	$.ajax({
+// 	    url: url,
+//         method: method,
+//         data: data,
+//         success: function (res) {
+//             if (res.success) {
+//                 toastr.success(res.msg);
+//                 if (res.view) {
+//                 	$(document).find('div#cart_section').html(res.view);
+//                 }
 
-                if (res.item) {
-                	$(document).find('span.cart-count').text(res.item);
-                }
+//                 if (res.item) {
+//                 	$(document).find('span.cart-count').text(res.item);
+//                 }
               
-                if(res.url){
-                	document.location.href = res.url;
-                } else {
-                    window.location.reload();
-                }
+//                 if(res.url){
+//                 	document.location.href = res.url;
+//                 } else {
+//                     window.location.reload();
+//                 }
                 
-            }else{
-                toastr.error(res.msg);
-            }
-        },
-        error:function (response){
-            $.each(response.responseJSON.errors,function(field_name,error){
-                toastr.error(error);
-            })
-        }
-	}); 
+//             }else{
+//                 toastr.error(res.msg);
+//             }
+//         },
+//         error:function (response){
+//             $.each(response.responseJSON.errors,function(field_name,error){
+//                 toastr.error(error);
+//             })
+//         }
+// 	}); 
  
-}); 
+// }); 
     
     $('li.size').click(function(){
 
@@ -699,25 +699,25 @@ $(".done").on("click", function () {
 });
 
 
-    dataLayer.push({ ecommerce: null }); // Clear the previous ecommerce object.
-    dataLayer.push({
-    event: "view_item",
-    ecommerce: {
-        currency: "BDT",
-        value:  {{ $data['price'] }},
-        items: [
-            {
-                item_id: "{{ $product->id}}",
-                item_name: "{{ $product->name}}",
-                discount: 0,
-                item_brand: "",
-                item_category: "vesoj",
-                item_list_id: "2",
-                price: {{ $data['price'] }},
-                quantity: 1
-            }
-            ]
-        }
-    });
+  dataLayer.push({ ecommerce: null }); // Clear the previous ecommerce object.
+  dataLayer.push({
+  event: "view_item",
+  ecommerce: {
+      currency: "BDT",
+      value:  {{ $data['price'] }},
+      items: [
+          {
+              item_id: "{{ $product->id}}",
+              item_name: "{{ $product->name}}",
+              discount: 0,
+              item_brand: "",
+              item_category: "vesoj",
+              item_list_id: "2",
+              price: {{ $data['price'] }},
+              quantity: 1
+          }
+          ]
+      }
+  });
 </script>
 @endpush

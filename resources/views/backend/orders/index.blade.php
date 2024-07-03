@@ -94,6 +94,10 @@
                           <a class="pathao_content btn btn-sm btn-info mb-1" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">
                             Send to Pathao
                           </a>
+
+                          <a class="redx_content btn btn-sm btn-success mb-1" href="#" data-bs-toggle="modal" data-bs-target="#redxModal">
+                            Send to RedX
+                          </a>
                          
                           <div class="col-md-4 d-none">
                             <select class="select2" name="redx_status">
@@ -216,7 +220,7 @@
                               	<td style="color: #000;">{{ \Carbon\Carbon::parse($item->created_at)->diffForHumans() }}</td>
                                 <td style="color: #000;">{{$item->first_name.' '.$item->last_name}}<br>
                                     {{$item->shipping_address}}<br>
-                                    {{$item->mobile}} @if ($item->order_serial) ({{ $item->order_serial}}) @endif <a class="btn btn-sm btn-primary" href="tel:{{$item->mobile}}"><span>Call</span></a>
+                                    <a href="{{ route('admin.customer.orders', ['number' => $item->mobile]) }}">{{$item->mobile}}</a> @if ($item->order_serial) ({{ $item->order_serial}}) @endif <a class="btn btn-sm btn-primary" href="tel:{{$item->mobile}}"><span>Call</span></a>
                                 </td>
                               <td>
                                   
@@ -232,7 +236,7 @@
                                             echo $detail->product['sku'];
                                         }
                                     }
-                                  ?>
+                                ?>
                                 
                                 </td>
                                 <td style="width:15%">
@@ -262,9 +266,9 @@
                                 </td>
 
                                 <td style="color: #000;">{{ $item->courier?$item->courier->name:''}} <br> {{ $item->courier_tracking_id ?? ''}}
-                              		<br> {{ $item->area_name ?? ''}}
+                              	    <br> {{ $item->area_name ?? ''}}
                               	</td>
-								            <td style="color: #000;">
+								<td style="color: #000;">
                                   @php 
                                     $final_amount = $item->final_amount;                                    
                                     $fa = intval($final_amount);                                    
@@ -275,16 +279,18 @@
                             </tr>
                             @endforeach
                         </tbody>
+                        <tfoot>
+                        </tfoot>
                     </table>
-                  	 </div>
-                    <p>{!! urldecode(str_replace("/?","?",$items->appends(Request::all())->render())) !!}</p>
                 </div>
-            </div> <!-- end card-body-->
+                <p>{!! urldecode(str_replace("/?","?",$items->appends(Request::all())->render())) !!}</p>
+            </div>
+        </div> <!-- end card-body-->
         </div> <!-- end card-->
     </div> <!-- end col -->
 </div> <!-- end row -->
 
-
+<!-- Pathao Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" id="pathao_content_model">
     <div class="modal-content">
@@ -327,12 +333,82 @@
     </div>
   </div>
 </div>
+
+
+<!-- Redx Modal -->
+<div class="modal fade" id="redxModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" id="redx_content_model">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Redx Content </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            
+            <div class="modal-body">
+                
+                <div class="div-group mb-2">
+                    <label>City</label>
+                    <select class="form-control city-zone" name="city" id="pathao_city" required>
+                    </select>
+                    <input class="order_id" type="hidden" name="order_id" value="">
+                </div>
+    
+                <div class="div-group mb-2">
+                    <label>Zone</label>
+                    <select class="form-control pathao-zone" name="zone" id="zone" required>
+                    </select>
+                </div>
+    
+                <div class="div-group mb-2">
+                    <label>Area</label>
+                    <select class="form-control pathao-area" name="area" id="area" required>
+                    </select>
+                </div>
+    
+                <div class="div-group mb-2">
+                    <label>Weight</label>
+                    <input type="text" class="form-control" name="weight" id="weight">
+                </div>
+    
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a href="{{ route('admin.createPathaoParcel')}}" class="send_to_pathao btn btn-primary"> Submit</a>
+            </div>
+        </div>
+    </div>
+  </div>
 @endsection 
 
 @push('js')
 <script src="{{ asset('backend/js/order.js')}}"></script>
 <script>
 $(document).ready(function(){
+
+    //Redx JS
+    $('.redx_content').on('click', function(){
+        var order = $('input.order_checkbox:checked').map(function(){
+            return $(this).val();
+        });
+        var order_ids=order.get();
+        
+        if(order_ids.length ==0){
+            toastr.error('Please Select Atleast One Order!');
+        }  
+        $('.order_id').val(order_ids);
+        $.ajax({
+            type:'GET',
+            url:"redx-city-list",
+            success:function(res){
+                var html = '<option value=""> Select Option </option>';
+                const citys = res.data.data;
+                citys.map((city) => {
+                    html += '<option value="'+ city.city_id +'">'+ city.city_name +'</option>'
+                })
+                $(".city-zone").append(html);
+            }
+        });
+    })
 
     $('.pathao_content').on('click', function(){
         var order = $('input.order_checkbox:checked').map(function(){
