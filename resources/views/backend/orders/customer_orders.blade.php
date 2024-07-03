@@ -124,7 +124,7 @@
                                         <td class="table-success">{{ $courier[5]['delivered'] }}</td>
                                         <td class="table-danger">{{ $courier[5]['pending'] }}</td>
                                         <td>{{ ($courier[5]['delivered'] * 100)/($courier[5]['delivered'] + $courier[5]['pending']) }}</td>
-                                    </tr>
+                                        </tr>
                                 @else
                                     <tr>
                                         <th scope="row">SteadFast</th>
