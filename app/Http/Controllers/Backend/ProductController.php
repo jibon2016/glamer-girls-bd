@@ -277,7 +277,7 @@ class ProductController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {        
+    { 
 
         if(!auth()->user()->can('product.edit'))
         {
@@ -297,7 +297,8 @@ class ProductController extends Controller
              'purchase_price'=> '',
              'regular_price'=> '',
              'sell_price'=> 'required|numeric',
-             'is_stock' => ''
+             'is_stock' => '',
+             'delivery_charge'=> 'numeric',
         ]);
 
 

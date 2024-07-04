@@ -140,8 +140,8 @@
     <tbody>
     <input type="hidden" id="product_total_price" value="{{$total}}"/>
       <tr><td class="lbl-total-amount">টোটাল প্রাইস</td><td class="val-total-amount" id="val-total-amount">{{ priceFormate($total)}}</td></tr>
-      <tr><td class="lbl-delivery-charge">ডেলিভারি চার্জ</td><td class="val-delivery-charge" id="val-delivery-charge">{{ priceFormate('50')}}</td></tr>
-      <tr><td class="lbl-sub-total-amount">সর্বমোট টাকা</td><td class="val-sub-total-amount price-color" id="val-sub-total-amount">{{ priceFormate($total +50)}}</td></tr>
+      <tr><td class="lbl-delivery-charge">ডেলিভারি চার্জ</td><td class="val-delivery-charge" id="val-delivery-charge">{{ priceFormate($delivery_charge ?? '50')}}</td></tr>
+      <tr><td class="lbl-sub-total-amount">সর্বমোট টাকা</td><td class="val-sub-total-amount price-color" id="val-sub-total-amount">{{ priceFormate($total + ($delivery_charge ?? '50'))}}</td></tr>
       <tr>
         {{-- <td colspan="2">
           <section class="section pricing-tab-toggle-section mt-4">

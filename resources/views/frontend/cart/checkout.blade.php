@@ -91,11 +91,7 @@ $coupon_visibility = $info->coupon_visibility;
                                  $delivery_charge = null;
                                   if(count($cart) == 1){
                                     $temp = array_values($cart)[0];
-                                    // dump(data_get($temp, 'delivery_charge'));
-                                    // $delivery_charge = data_get($temp, 'delivery_charge');
-                                    // dd($temp);
                                     if(isset($temp['delivery_charge'])){
-
                                       $delivery_charge = $temp['delivery_charge'];
                                     }
                                   }
@@ -115,7 +111,7 @@ $coupon_visibility = $info->coupon_visibility;
                                     </label>
                                     @if(count($cart) == 1 && $delivery_charge !== null )
                                     <select required name="delivery_charge_id" id="selectCourier" class="form-control" style="font-size:12px !important;">
-                                          <option value=""> ডেলিভারি চার্জ সিলেক্ট করুন </option> 
+                                          
                                           <option value="1" data-charge="{{ $delivery_charge }}"> ডেলিভারী চার্জ  {{ $delivery_charge }}</option> 
                                     </select>
                                     <input type="hidden" id="delivery_charge" name="delivery_charge">
@@ -478,8 +474,7 @@ $coupon_visibility = $info->coupon_visibility;
         }
       
       $("#selectCourier").change(function(e){
-
-
+        
           let charge = Number($(this).find("option:selected").attr("data-charge"));
           console.log("Charge:", charge);
 

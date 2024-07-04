@@ -218,9 +218,10 @@
                                 </td>
                                 <td style="color: #000;">#{{$item->invoice_no}}</td>
                               	<td style="color: #000;">{{ \Carbon\Carbon::parse($item->created_at)->diffForHumans() }}</td>
-                                <td style="color: #000;">{{$item->first_name.' '.$item->last_name}}<br>
+                                <td style="color: #000;">{{$item->first_name.' '.$item->last_name}} <span class="text-danger">{{ $item->user->block == 1 ? '(Fraud)' : '' }}</span><br>
                                     {{$item->shipping_address}}<br>
-                                    <a href="{{ route('admin.customer.orders', ['number' => $item->mobile]) }}">{{$item->mobile}}</a> @if ($item->order_serial) ({{ $item->order_serial}}) @endif <a class="btn btn-sm btn-primary" href="tel:{{$item->mobile}}"><span>Call</span></a>
+                                    <a href="{{ route('admin.customer.orders', ['number' => $item->mobile]) }}">{{$item->mobile}}</a> @if ($item->order_serial) ({{ $item->order_serial}}) @endif 
+                                    <a class="btn btn-sm btn-primary" href="tel:{{$item->mobile}}"><span>Call</span></a>
                                 </td>
                               <td>
                                   

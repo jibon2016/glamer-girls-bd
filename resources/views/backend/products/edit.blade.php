@@ -110,6 +110,11 @@
                             </select>
                         </div>
 
+                        <div class="col-lg-4 mb-3">
+                            <label  class="form-label">Delivery Charge</label>
+                            <input type="number" value="{{ $item->delivery_charge }}" name="delivery_charge" class="form-control" placeholder="Delivery Charge">
+                        </div>
+
                         <!--<div class="col-lg-4 mb-3">-->
                         <!--    <label  class="form-label">Purchase Price</label>-->
                         <!--    <input type="text" name="purchase_price" class="form-control" value="{{ $item->purchase_price}}">-->
