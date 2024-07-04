@@ -49,6 +49,7 @@ class DashboardController extends Controller
     }
   
   	public function getDashboardData(){
+        $order= Order::all();
     	$data['products']=Product::count();
       	$data['orders']=Order::count();
       	$data['users']=User::count();
@@ -59,6 +60,10 @@ class DashboardController extends Controller
                                 )->sum('final_amount');
         $data['orderProcessing']=Order::where('status','processing')->count();
         $data['orderPending']=Order::where('status','pending')->count();
+        $data['orderCancel'] = $order->where('status', 'cancell')->count();
+        $data['orderDelivered'] = $order->where('status', 'complete')->count();
+        $data['orderReturn'] = $order->where('status', 'return')->count();
+        $data['totalAmount'] = $order->sum('final_amount');
      	return view('backend.partials.dashboard_data', $data);
 	}
   

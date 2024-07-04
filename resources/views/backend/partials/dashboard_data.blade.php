@@ -205,4 +205,44 @@
             </div>
         </a>
     </div>	
+    <div class="col-md-2 col-4 mb-2 p-1">
+        <a href="#">
+            <div class="bg-white p-0 pb-2 pt-3 fs-4 text-center service-box">
+                <p class="m-0 icon-value">{{ number_format($orders,0)}}</p>	
+                <p class="m-0 pt-1 mb-2 service-name"><span class="d-sn-1">টোটাল</span> অর্ডার</p>				
+            </div>
+        </a>
+    </div>
+    <div class="col-md-2 col-4 mb-2 p-1">
+        <a href="#">
+            <div class="bg-white p-0 pb-2 pt-3 fs-4 text-center service-box">
+                <p class="m-0 icon-value">{{ number_format($orderCancel,0)}}</p>	
+                <p class="m-0 pt-1 mb-2 service-name"><span class="d-sn-1">টোটাল</span> ক্যান্সেল</p>				
+            </div>
+        </a>
+    </div>
+    <div class="col-md-2 col-4 mb-2 p-1">
+        <a href="#">
+            <div class="bg-white p-0 pb-2 pt-3 fs-4 text-center service-box">
+                <p class="m-0 icon-value">{{ number_format($orderDelivered,0)}}</p>	
+                <p class="m-0 pt-1 mb-2 service-name"><span class="d-sn-1">ডেলিভারি </span> কমপ্লিট </p>				
+            </div>
+        </a>
+    </div>
+    <div class="col-md-2 col-4 mb-2 p-1">
+        <a href="#">
+            <div class="bg-white p-0 pb-2 pt-3 fs-4 text-center service-box">
+                <p class="m-0 icon-value">{{ number_format($orderReturn,0)}}</p>	
+                <p class="m-0 pt-1 mb-2 service-name"><span class="d-sn-1">অর্ডার </span> রিটার্ন </p>				
+            </div>
+        </a>
+    </div>
+    <div class="col-md-2 col-4 mb-2 p-1">
+        <a href="#">
+            <div class="bg-white p-0 pb-2 pt-3 fs-4 text-center service-box">
+                <p class="m-0 icon-value">{{ number_format($totalAmount,0)}}</p>	
+                <p class="m-0 pt-1 mb-2 service-name"><span class="d-sn-1">টোটাল</span> টাকা </p>				
+            </div>
+        </a>
+    </div>
 </div>
