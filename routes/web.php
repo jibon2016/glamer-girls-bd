@@ -162,10 +162,14 @@ Route::group(['prefix' => 'admin','middleware' => 'auth','as'=>'admin.'], functi
   	
   	Route::get('/Ip-block/delete/{id}', [IPBlockController::class, 'delete'])->name('ipblock.delete');
   	Route::get('/Ip-block/edit/{id}', [IPBlockController::class, 'edit'])->name('ipblock.edit');
-	Route::put('/Ip-block/update/{id}', [IPBlockController::class, 'update'])->name('ipblock.update');
-  
+	  Route::put('/Ip-block/update/{id}', [IPBlockController::class, 'update'])->name('ipblock.update');
+    
     Route::post('/Ip-block-submit', [IPBlockController::class, 'IPBlockSubmit'])->name('ipblock.submit');
   	
+    //Fraud User Block
+    Route::get('/fraud-user', [UsersController::class, 'fraudUser'])->name('fraud.user');
+	  Route::post('/fraud-user', [UsersController::class, 'fradUserStore'])->name('fraud.user.submit');
+	  Route::post('/fraud-user/update/{id}', [UsersController::class, 'fradUserUpdate'])->name('fraud.user.update');
   
   	Route::get('/dashboard',[DashboardController::class,'index'])->name('dashboard');
   	Route::get('/get-dashboard-data',[DashboardController::class,'getDashboardData'])->name('getDashboardData');

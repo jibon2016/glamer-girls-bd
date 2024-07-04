@@ -298,12 +298,18 @@
                         <span>Block Ip</span>
                     </a>
                 </li>
-              <li>
-                    <a href="{{ route('admin.report.product')}}" class="">
+                <li>
+                    <a href="{{ route('admin.fraud.user')}}" class="">
                         <i class="uil-folder-plus"></i>
-                        <span>Product Report</span>
+                        <span>Enlist Fraud User</span>
                     </a>
                 </li>
+                <li>
+                        <a href="{{ route('admin.report.product')}}" class="">
+                            <i class="uil-folder-plus"></i>
+                            <span>Product Report</span>
+                        </a>
+                    </li>
               	@endif
             </ul>
         </div>

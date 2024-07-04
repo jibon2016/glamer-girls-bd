@@ -192,4 +192,50 @@ class UsersController extends Controller
         return response()->json(['status'=> true, 'msg' => 'User has been UPdated']);
         
     }
+    public function fraudUser(){
+        $users = User::where('block', 1)->get();
+          return view('backend.reports.userblock.index', compact('users'));
+   
+      }
+
+    public function fradUserStore(Request $request)
+    {
+        // Validate the incoming request data
+        $request->validate([
+            'mobile' => 'required',
+            'reason' => 'string',
+        ]);
+
+        $mobile = $request->input('mobile');
+        $reason = $request->input('reason');
+
+        // Check if the IP address is already blocked
+        $user = User::where('mobile', $mobile)->first();
+
+        if ($user->where('block', 1)->exists()) {
+            return redirect()->back()->with('error', 'This Number is already in list.');
+        }
+        
+        $user->block = 1;
+        $user->reason = $reason;
+        $user->save();
+
+        return redirect()->back()->with('success', 'This Number is Fraud listed.');
+    }
+    public function fradUserUpdate(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        
+        $data = $request->validate([
+            'mobile' => 'required',
+            'reason' => 'string',
+
+        ]);
+        
+        $user->block = 0;
+        $user->reason = $request->reason;
+        $user->save();
+        
+        return redirect()->route('admin.fraud.user')->with('success', 'User updated successfully.');
+    }
 }
