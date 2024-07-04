@@ -318,6 +318,9 @@ $data=getProductInfo($product);
                                         @else
                                         <input type="hidden" name="price" id="price_val" value="{{ $product->sell_price }}">
                                         @endif
+                                        @if($product->delivery_charge)
+                                          <input type="hidden" name="delivery_charge" value="{{ $product->delivery_charge }}">
+                                        @endif
                                         <input type="hidden" name="is_stock" value="{{ $product->is_stock }}">
                                         <style>
                                           .product-details-pro-qty {

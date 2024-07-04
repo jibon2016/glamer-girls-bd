@@ -158,7 +158,8 @@ class CartController extends Controller
                 "product_id" => $product_id,
                 "image" => $product->image,
                 "is_stock" => $product->is_stock,
-                "is_free_shipping" => $product->is_free_shipping
+                "is_free_shipping" => $product->is_free_shipping,
+                "delivery_charge" => $product->delivery_charge
             ];
         }
         session()->put('cart', $cart);

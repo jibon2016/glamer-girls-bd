@@ -81,19 +81,19 @@
                             </select>
                         </div>
 
-                        <!--<div class="col-lg-3 mb-3">-->
-                        <!--    <label  class="form-label">Purchase Price</label>-->
-                        <!--    <input type="text" name="purchase_price" class="form-control" placeholder="Productn Purchase Price">-->
-                        <!--</div>-->
+                        <div class="col-lg-4 mb-3">
+                            <label  class="form-label">Delivery Charge</label>
+                            <input type="number" name="delivery_charge" class="form-control" placeholder="Delivery Charge">
+                        </div>
 
                         <div class="col-lg-3 mb-3">
                             <label  class="form-label">Sell Price</label>
                             <input type="text" name="sell_price" class="form-control" placeholder="Productn sell Price">
                         </div>
                         
-                         <div class="col-lg-3 mb-3">
+                        <div class="col-lg-3 mb-3">
                             <label  class="form-label"><del>Regular Price</del></label>
-                             <input type="text" name="regular_price" class="form-control">
+                            <input type="text" name="regular_price" class="form-control">
                         </div>
 
                         <div class="col-lg-3 mb-3">

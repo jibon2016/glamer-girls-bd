@@ -88,7 +88,17 @@ $coupon_visibility = $info->coupon_visibility;
                               <!-- ip address -->
                                 <input type="hidden" name="ip_address" id="ip_address" value="">
                                  <?php
-                                 
+                                 $delivery_charge = null;
+                                  if(count($cart) == 1){
+                                    $temp = array_values($cart)[0];
+                                    // dump(data_get($temp, 'delivery_charge'));
+                                    // $delivery_charge = data_get($temp, 'delivery_charge');
+                                    // dd($temp);
+                                    if(isset($temp['delivery_charge'])){
+
+                                      $delivery_charge = $temp['delivery_charge'];
+                                    }
+                                  }
                                    $shipping_value = [];
                                    
                                    foreach($cart as $key=>$item) {
@@ -96,20 +106,27 @@ $coupon_visibility = $info->coupon_visibility;
                                    }
                                    
                                  if(in_array(null, $shipping_value)) {
-                                       ?>
+                                  
+                                  ?>
                                        
                                   <div class="form-group col-sm-12">
                                     <label>
                                       আপনার এরিয়া সিলেক্ট করুন*
                                     </label>
+                                    @if(count($cart) == 1 && $delivery_charge !== null )
+                                    <select required name="delivery_charge_id" id="selectCourier" class="form-control" style="font-size:12px !important;">
+                                          <option value=""> ডেলিভারি চার্জ সিলেক্ট করুন </option> 
+                                          <option value="1" data-charge="{{ $delivery_charge }}"> ডেলিভারী চার্জ  {{ $delivery_charge }}</option> 
+                                    </select>
+                                    <input type="hidden" id="delivery_charge" name="delivery_charge">
+                                    @else
                                       <select required name="delivery_charge_id" id="selectCourier" class="form-control" style="font-size:12px !important;">
                                         @foreach($charges as $key=>$charge)
                                             <option value="{{ $charge->id}}" data-charge="{{ $charge->amount}}">{{ $charge->title }}</option>
-                                          @endforeach  
+                                        @endforeach  
                                       </select>
+                                    @endif
                                   </div>
-                                       
-                                        
                                        
                                        <?php
                                    } else {
@@ -142,7 +159,6 @@ $coupon_visibility = $info->coupon_visibility;
                 </div>
                 <div class="col-md-6 orderDetails">
                     @include('frontend.cart.details')
-
                 </div>
             </div>
         </div>
@@ -475,6 +491,7 @@ $coupon_visibility = $info->coupon_visibility;
 
 
           $(document).find(".val-delivery-charge").text("৳"+charge);
+          $(document).find("#delivery_charge").val(charge);
           // $(document).find(".val-total-amount").text(""+final_total);
           $(document).find("#val-sub-total-amount").text("৳"+final_total);
       });

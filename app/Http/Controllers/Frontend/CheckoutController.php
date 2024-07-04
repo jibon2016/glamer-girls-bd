@@ -294,9 +294,12 @@ use App\Models\Variation;
 
             }
         }
-      
+      if($data['delivery_charge_id'] == 1){
+        $charge = $request->delivery_charge;
+      }else{
       	$charge=DeliveryCharge::find($data['delivery_charge_id']);
       	$charge=$charge?$charge->amount:0;
+      }
         $data['date']=date('Y-m-d');
         
         

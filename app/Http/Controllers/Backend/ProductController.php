@@ -112,6 +112,7 @@ class ProductController extends Controller
              'purchase_price'=> '',
              'sell_price'=> 'required|numeric',
              'regular_price'=> '',
+             'delivery_charge'=> 'numeric',
              'is_stock' => '',
              'video_link' => ''
         ]);
