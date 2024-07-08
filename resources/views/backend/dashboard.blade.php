@@ -57,6 +57,11 @@
 
 </div>
 
+<h3>Monthly Sales Report</h3>
+<div style="width:75%;">
+    {!! $chart->render() !!}
+</div>
+
 <style>
     .btn.btn-sm{
         font-size: 12px;
@@ -314,6 +319,7 @@
 @push('js')
 
 <script src="{{ asset('backend/js/order.js')}}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.js">
 <script>
 $(document).ready(function(){
 

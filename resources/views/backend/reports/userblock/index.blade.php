@@ -107,9 +107,10 @@
                 url: url,
                 data: data,
                 success: function(response) {
+                    
+                    location.reload()
                     if (response.success) {
 
-                      Window.location.reload()
                         // Update table row with new data
                         // var row = form.closest('tr');
                         // row.find('.ip-address').text(response.ip_address);

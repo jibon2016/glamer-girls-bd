@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\User;
 use Auth;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use DB;
 
 
@@ -24,7 +25,7 @@ class DashboardController extends Controller
         $status=$request->status;
         $q=$request->q;
 		$query=Order::whereHas('details.product', function($q){
-          			$q->whereNotNull('name');
+        $q->whereNotNull('name');
         	});
                 if(!empty($q)){
                     $query->where(function($row) use ($q){
@@ -45,7 +46,82 @@ class DashboardController extends Controller
         
         $items=$query->latest()->take(20)->get();       
         $statuses=getOrderStatus();
-        return view('backend.dashboard', compact('items','status','q','statuses'));
+
+
+        
+        
+        $start = Carbon::parse(Order::where('status', 'pending')->whereBetween('created_at', [
+            Carbon::now()->startOfMonth(),
+            Carbon::now()->endOfMonth(),
+        ])->min('created_at'));
+
+        $end = Carbon::now();
+        $period = CarbonPeriod::create($start, "1 month", $end);
+
+        
+        // $ordersPerMonth = collect($period)->map(function ($date) {
+        //     $endDate = $date->copy()->endOfMonth();
+        //     return [
+        //         "count" => Order::where('status', 'pending')->where("created_at", "<=", $endDate)->count(),
+        //         "month" => $endDate->format("Y-m-d")
+        //     ];
+        // });
+        // dd($ordersPerMonth);
+
+        // $data = $ordersPerMonth->pluck("count")->toArray();
+        // $labels = $ordersPerMonth->pluck("month")->toArray();
+
+        $thisMonthOrder = Order::whereBetween('created_at',[ 
+        Carbon::now()->startOfMonth(),
+        Carbon::now()->endOfMonth()])->get()->groupBy('date');
+        // dd($thisMonthOrder);
+        $cOrder = [];
+        foreach ($thisMonthOrder as $key => $order) {
+            $cOrder['label'][] = $key;
+            $cOrder['delivered'][] = $order->where('status', 'delivered')->count(); 
+            $cOrder['returned'][] = $order->where('status', 'pending')->count(); 
+        }
+
+        // dd($cOrder['label']);
+        $chart = app()
+        ->chartjs
+        ->name('MonthlySalesChart')
+        ->type('bar')
+        ->size(['width' =>400, 'height'=>200])
+        ->labels($cOrder['label'])
+        ->datasets([
+            [
+                "label" => "Delivered",
+                "backgroundColor" => "rgba(38, 185, 154, 0.31)",
+                "borderColor" => "rgba(38, 185, 154, 0.7)",
+                "data" => $cOrder['delivered']
+            ],
+            [
+                "label" => "Returned",
+                "backgroundColor" => "rgba(244, 72, 25, 0.38)",
+                "borderColor" => "rgba(244, 72, 25, 0.69)",
+                "data" => $cOrder['returned']
+            ]
+        ])
+        ->options([
+            'scales' => [
+                'x' => [
+                    'type' => 'time',
+                    'time' => [
+                        'unit' => 'month'
+                    ],
+                    'min' => $start->format("Y-m-d"),
+                ]
+            ],
+            'plugins' => [
+                'title' => [
+                    'display' => true,
+                    'text' => 'Monthly User Registrations'
+                ]
+            ]
+        ]);
+
+        return view('backend.dashboard', compact('items','chart','status','q','statuses'));
     }
   
   	public function getDashboardData(){

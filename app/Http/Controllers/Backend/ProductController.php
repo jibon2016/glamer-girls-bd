@@ -112,7 +112,7 @@ class ProductController extends Controller
              'purchase_price'=> '',
              'sell_price'=> 'required|numeric',
              'regular_price'=> '',
-             'delivery_charge'=> 'numeric',
+             'delivery_charge'=> '',
              'is_stock' => '',
              'video_link' => ''
         ]);
@@ -298,7 +298,7 @@ class ProductController extends Controller
              'regular_price'=> '',
              'sell_price'=> 'required|numeric',
              'is_stock' => '',
-             'delivery_charge'=> 'numeric',
+             'delivery_charge'=> '',
         ]);
 
 
