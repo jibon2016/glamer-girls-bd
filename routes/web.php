@@ -49,7 +49,6 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 
 
 
-
 Route::get('/delete',[DeleteController::class,'index']);
 Route::get('/folder',[DeleteController::class,'folder']);
 Route::get('/ccc', function(){

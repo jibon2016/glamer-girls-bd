@@ -74,7 +74,6 @@ class DashboardController extends Controller
         $thisMonthOrder = Order::whereBetween('created_at',[ 
         Carbon::now()->startOfMonth(),
         Carbon::now()->endOfMonth()])->get()->groupBy('date');
-        // dd($thisMonthOrder);
         $cOrder = [];
         foreach ($thisMonthOrder as $key => $order) {
             $cOrder['label'][] = $key;
@@ -82,7 +81,6 @@ class DashboardController extends Controller
             $cOrder['returned'][] = $order->where('status', 'pending')->count(); 
         }
 
-        // dd($cOrder['label']);
         $chart = app()
         ->chartjs
         ->name('MonthlySalesChart')

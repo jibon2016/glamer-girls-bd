@@ -267,7 +267,8 @@ class OrderController extends Controller
         // }
         
         $info=Information::first();
-        return view('backend.orders.show', compact('item', 'info'));
+        // return view('backend.orders.show', compact('item', 'info'));
+        return view('backend.reports.receipt', compact('item', 'info'));
     }
 
     /**
