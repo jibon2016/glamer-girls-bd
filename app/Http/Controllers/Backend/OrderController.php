@@ -835,14 +835,21 @@ class OrderController extends Controller
         foreach(request('order_ids') as $id)
         {   
            $item=Order::with('user')->find($id);
-           if($item->status == 'on_the_way' && $item->courier_id == 1 && $item->courier_tracking_id == NULL)
+           $item->area_name = request('city');
+            $item->area_id = request('area');
+            $item->shipping_address = $item->shipping_address . '( '. request('address'). ')';
+            $item->weight = request('weight');
+
+            $item->save();
+           if( $item->courier_tracking_id == NULL)
            {
               $status = $this->createRedxParcel($item);
-              
+
               //$data = $status['tracking_id'];
               if(!empty($status['tracking_id']))
               {
                 $item->courier_tracking_id = $status['tracking_id'];
+                $item->courier_id = 7; //Id 2 is RedX Parcel
                 $item->save();
               }
              else if(!empty($status['message']))
@@ -860,15 +867,24 @@ class OrderController extends Controller
 
 
   
-  function getRedxAreaList($by = null, $value = null)
+  function getRedxAreaList($district = null, $value = null)
   {
       $response = Http::withHeaders([
             'API-ACCESS-TOKEN' => $this->redx_api_access_token,
        ])->get($this->redx_api_base_url.'areas'); 
        $areas = $response->json();
-       dd($areas);
        return $areas;
   }
+
+  function getRedxDistList($district)
+  {
+      $response = Http::withHeaders([
+            'API-ACCESS-TOKEN' => $this->redx_api_access_token,
+       ])->get($this->redx_api_base_url.'areas?district_name='.$district); 
+       $areas = $response->json();
+       return $areas;
+  }
+
   function createRedxParcel($item)
   {
       //$area = $this->getRedxAreaList('post_code', $item->zip_code)[0];
@@ -884,7 +900,7 @@ class OrderController extends Controller
             "customer_address"       => $item->shipping_address, 
             "merchant_invoice_id"    => $item->invoice_no,
             "cash_collection_amount" => $item->final_amount,
-            "parcel_weight"          => "500", //parcel weight in gram
+            "parcel_weight"          => $item->weight, //parcel weight in gram
             "instruction"            => "",
             "value"                  => $item->final_amount, //compensation amount
             "pickup_store_id"        => 0, // store id

@@ -348,33 +348,27 @@
             <div class="modal-body">
                 
                 <div class="div-group mb-2">
-                    <label>City</label>
-                    <select class="form-control city-zone" name="city" id="pathao_city" required>
+                    <label>District</label>
+                    <select class="form-control redx-city" name="city" id="redx_city" required>
                     </select>
                     <input class="order_id" type="hidden" name="order_id" value="">
                 </div>
     
                 <div class="div-group mb-2">
-                    <label>Zone</label>
-                    <select class="form-control pathao-zone" name="zone" id="zone" required>
-                    </select>
-                </div>
-    
-                <div class="div-group mb-2">
                     <label>Area</label>
-                    <select class="form-control pathao-area" name="area" id="area" required>
+                    <select class="form-control redx-zone" name="area_id" id="redx_zone" required>
                     </select>
                 </div>
-    
+
                 <div class="div-group mb-2">
                     <label>Weight</label>
-                    <input type="text" class="form-control" name="weight" id="weight">
+                    <input type="text" class="form-control" name="weight" id="redx_weight">
                 </div>
     
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <a href="{{ route('admin.createPathaoParcel')}}" class="send_to_pathao btn btn-primary"> Submit</a>
+                <a href="{{ route('admin.createRedxParcel')}}" class="send_to_redx btn btn-primary"> Submit</a>
             </div>
         </div>
     </div>
@@ -395,22 +389,47 @@ $(document).ready(function(){
         
         if(order_ids.length ==0){
             toastr.error('Please Select Atleast One Order!');
-        }  
+        }else{
         $('.order_id').val(order_ids);
         $.ajax({
             type:'GET',
-            url:"redx-city-list",
+            url:"redx-city-list/" ,
+            success:function(res){
+                const areas = res.areas;
+                const groupByDevision = areas.reduce((acc, area) => {
+                    const division = area.district_name;
+                    (acc[division] = acc[division] || []).push(area);
+                    return acc;
+                }, {});
+                var html = '<option value=""> Select Option </option>';
+                
+                Object.keys(groupByDevision).map((name) => {
+                    html += '<option value="'+ name +'">'+ name +'</option>'
+                });
+                $(".redx-city").append(html);
+            }
+        });
+        }
+    });
+
+    
+    $("#redx_city").on('change', function(){
+        var cityValue = $('#redx_city').val();
+        $.ajax({
+            type:'GET',
+            url:"redx-city-list/" + cityValue,
             success:function(res){
                 var html = '<option value=""> Select Option </option>';
-                const citys = res.data.data;
-                citys.map((city) => {
-                    html += '<option value="'+ city.city_id +'">'+ city.city_name +'</option>'
+                const zones = res.areas;
+                zones.map((zone) => {
+                    html += '<option value="'+ zone.id +'">'+ zone.name +'</option>'
                 })
-                $(".city-zone").append(html);
+                $(".redx-zone").append(html);
             }
         });
     })
 
+    //Pathao JS
     $('.pathao_content').on('click', function(){
         var order = $('input.order_checkbox:checked').map(function(){
             return $(this).val();
@@ -652,43 +671,47 @@ $(document).ready(function(){
   //Redx Courier Service
   $(document).on('click', 'a.send_to_redx', function(e){
         e.preventDefault();
-    // 	var statusValue = $("input[name='status']:checked").val();
+        // var order_ids = $(".order_id").val().split();
         var url = $(this).attr('href');
     	let link = $(this);
         var order = $('input.order_checkbox:checked').map(function(){
           return $(this).val();
         });
         var order_ids=order.get();
-        
+
+        var city = $('#redx_city').val();
+        var area = $('#redx_zone').val();
+        var weight = $('#redx_weight').val();
+        var address = $('#redx_zone option:selected').text()+", " + city;
         if(order_ids.length ==0){
             toastr.error('Please Select Atleast One Order!');
+            $("#redxModal").modal('hide');
             return ;
-        }        
-    	
-        // else if(statusValue != 'on_the_way'){
-        //     toastr.error('Only On The Way Orders are Accepted!');
-        //     return ;
-        // }
-    	
-        
+        }       
+        console.log(url); 
         $.ajax({
-           type:'GET',
-           url,
-           data:{order_ids},
-           beforeSend: function(){
-             link.addClass('disable-click');
-             link.text('Please wait...');
-           },
-           success:function(res){
-               link.removeClass('disable-click');
-               link.text('Send to Redx');
-               if(res.status){               
+            type:'GET',
+            url,
+            data:{order_ids, city, area, weight, address},
+            beforeSend: function(){
+                link.addClass('disable-click');
+                link.text('Please wait...');
+            },
+            success:function(res){
+                link.removeClass('disable-click');
+                link.text('Send to RedX');
+                if(res.status){       
+                $("#redxModal").modal('hide');        
                 toastr.success(res.msg);
-                   
             }else{
-                toastr.error(res.msg);
+                $("#redxModal").modal('hide');
+                toastr.warning(res.error);
+                console.log(res.errors);
+            }},
+            error:function(error){
+                $("#redxModal").modal('hide');
+                console.log(error);
             }
-           }
         });
     
     });

@@ -150,7 +150,7 @@ Auth::routes();
 
 //backend
 Route::controller(AuthController::class)->group(function(){
-    Route::get('/admin','login')->name('admin.login');
+    Route::get('/zobaer','login')->name('admin.login');
     Route::post('/admin-login','postLogin')->name('admin.postLogin');
 });
 
@@ -206,6 +206,7 @@ Route::group(['prefix' => 'admin','middleware' => 'auth','as'=>'admin.'], functi
         
       //Redx Courier Service
         Route::get('/redx-city-list','getRedxAreaList');     
+        Route::get('/redx-city-list/{discrict}','getRedxDistList');     
         Route::get('/create-redx-parcel','OrderSendToRedx')->name('createRedxParcel');     
         
       //Pathao Courier Service
