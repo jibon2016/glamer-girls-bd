@@ -50,7 +50,7 @@
             <p class="my-2 text-sm"><b>Address: </b>{{$info->address}}</p>
             <p class="my-2 text-sm"><b>Email: </b>{{$info->owner_email}}</p>
             <p class="my-2 text-sm"><b>Phone: </b>{{$info->owner_phone}}</p>
-            <p class="my-2 text-sm"><b>Invoice Id: </b>#12345</p>
+            <p class="my-2 text-sm"><b>Invoice Id: </b>{{ $item->courier_tracking_id }}</p>
             <p class="my-2 text-sm"><b>Date: </b>{{dateFormate($item->date)}}</p>
         </div>
     </center>
