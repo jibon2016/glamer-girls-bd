@@ -1175,4 +1175,43 @@ class OrderController extends Controller
         }
         return $arr;
     }
+    public function getAllOrderStatus() {
+        $orders = Order::whereNotNull('courier_tracking_id')->whereNotIn('status', ['delivered', 'cancell'])->get();
+        foreach($orders as $order){
+            $tracking_id = $order->courier_tracking_id;
+            if($order->courier_id == 5){
+                $response = Http::withHeaders([
+                    'Api-Key' => $this->steadfast_api_key,
+                    'Secret-Key' => $this->steadfast_secret_key,
+                    'Content-Type' => 'application/json'
+                ])->get($this->steadfast_api_base_url.'status_by_cid/'.$tracking_id); 
+                
+                $parcel =  $response->json();
+                $order->status = strtolower($parcel["delivery_status"]);
+                $order->save();
+                return response()->back();
+            }else if($order->courier_id == 2) {
+                $response = Http::withHeaders([
+                    'Authorization' => $this->pathao_api_access_token,
+                ])->get($this->pathao_api_base_url.'orders/'. $tracking_id.'/info'); 
+                
+                $parcel =  $response->json();
+                $order->status = strtolower($parcel["data"]["order_status"]);
+                $order->save();
+                return response()->back();
+            } else if( $order->courier_id == 7){
+                $response = Http::withHeaders([
+                    'API-ACCESS-TOKEN' => $this->redx_api_access_token,
+                    'Content-Type' => 'application/json'
+                ])->get($this->redx_api_base_url.'parcel/info/'. $tracking_id); 
+                
+                $parcel =  $response->json();
+                $order->status = strtolower($parcel['parcel']['status']);
+                $order->save();
+                return response()->back(); 
+            }
+            
+        }
+    }
+    
 }

@@ -181,8 +181,8 @@ Route::group(['prefix' => 'admin','middleware' => 'auth','as'=>'admin.'], functi
   	Route::controller(OrderController::class)->group(function(){
 
         Route::get('/order-status/{id}','orderStatus')->name('orderStatus');
+        Route::get('/all-order-status', 'getAllOrderStatus')->name('getAllOrderStatus');
         Route::post('/order-status/update/{id}','orderStatusUPdate')->name('orderStatusUPdate');
-        //
 
         Route::get('/get-order-product','getOrderProduct')->name('getOrderProduct');
         Route::get('/get-order-product2','getOrderProduct2')->name('getOrderProduct2');

@@ -98,6 +98,7 @@
                           <a class="redx_content btn btn-sm btn-success mb-1" href="#" data-bs-toggle="modal" data-bs-target="#redxModal">
                             Send to RedX
                           </a>
+                          <a class="reload-status btn btn-sm btn-success mb-1" href="{{ route('admin.getAllOrderStatus') }}"><i class="mdi mdi-refresh"></i></a>
                          
                           <div class="col-md-4 d-none">
                             <select class="select2" name="redx_status">
@@ -258,7 +259,6 @@
                                         <span class="badge badge-info">{{$item->status}}</span>
                                         @endif
                                     </a>
-                                    <a class="reload-status btn btn-sm btn-success" href="{{$item->courier_tracking_id}}"><i class="mdi mdi-refresh"></i></a>
                                 </td>
                                 <td><a href="{{ route('admin.orders.view', $item->id)}}" target="_blank">
                                         
